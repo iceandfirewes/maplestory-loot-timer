@@ -1,5 +1,4 @@
 import { useState,useEffect, createRef } from 'react'
-import './App.css'
 import ringTone from './assets/vendarroRing.wav'
 import mesoBag from './assets/mesoBag.png'
 function App() {
