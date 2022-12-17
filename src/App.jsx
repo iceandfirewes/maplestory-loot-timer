@@ -1,6 +1,7 @@
 import { useState,useEffect, createRef } from 'react'
 import './App.css'
 import ringTone from './assets/vendarroRing.wav'
+import mesoBag from './assets/mesoBag.png'
 function App() {
   const [active, setActive] = useState(false)
   const [timeMark, setTimeMark] = useState(Date.now())
@@ -14,7 +15,8 @@ function App() {
   function startTimer()
   {
     setActive(true)
-    setTimeMark(Date.now())
+    setTimeMark(Date.now() + 5*SECOND)
+    setBoolTonePlayed(false)
   }
   function handleInput(event)
   {
@@ -40,7 +42,7 @@ function App() {
           }
         }
         setTime(Date.now())
-      }, .5 * SECOND)
+      }, .3 * SECOND)
       return () => clearInterval(interval);
     }
   /**for some reason, setting this to active and time make the timer
@@ -56,38 +58,44 @@ function App() {
     minutes: (time - timeMark) / MINUTE % 60,
     seconds: (time - timeMark) / SECOND % 60
   }).map(([label,value],index) => {
-    /**code so that the minutes and second cant be -1 because when
-     * timeMark and time get update at roughly the same time, the milisecond 
-     * when rounded down would result in a -1:-1 being displayed. this is to
-     * prevent that
-    */
    var timeValue
-    if(value < 0)
+   //for the 5s countdown so it doesnt display a -1
+    if(value < 0 && label == "minutes")
     {      
-      timeValue = <span>{"0".padStart(2,"0")}</span>
+      timeValue = "0".padStart(2,"0")
     }
+    //for the 5s countdown so it doesnt display -6 then -5 immediately
+    else if(value < 0 && label == "seconds")
+    {      
+      timeValue = `${Math.ceil(value)}`.padStart(2, "0")
+    }
+    //add a 0 if is needed
     else
     {
-      timeValue = <span>{`${Math.floor(value)}`.padStart(2, "0")}</span>
+      timeValue = `${Math.floor(value)}`.padStart(2, "0")
     }
-    return <>{timeValue}{index === 0 && <span>:</span>}</>
+    return <>{timeValue}{index === 0 && ":"}</>
   })
   return (
     <div className="App">
-      <h4>Meso bag expire every 2 minutes. Thus, you would want to loot everything before that.</h4>
-      <h4>Please set your mobbing time. for example, 1m40s.</h4>
-      <h4>when that time has elapese, a ring tone will sound, you should loot at this time.</h4>
+      <p className='info'>Meso bag expire every 2 minutes. Thus, you would want to loot everything before that.<br/>
+        Please set your mobbing time. for example, 1m40s. When that time has elapsed, a ring tone will sound, 
+        you should loot at this time. When that time has elapese, a ring tone will sound, you should loot at this time.
+        You should set the mobbing time so that when you finish looting, the timer is close to 2m.</p>
       <div>
-        <input className="secondInput" onChange={(event) => setMobbingTime(event.target.value*SECOND)}value={mobbingTime/1000} placeholder="Seconds"></input><span>s</span>
+        Mobbing Time:<input className="secondInput" onChange={(event) => setMobbingTime(event.target.value*SECOND)}value={mobbingTime/1000} placeholder="Seconds"></input><span>s</span>
       </div>
-      <div>{timeDisplay}</div>
+      <h1 className='timeDisplay'>{timeDisplay}</h1>
       <audio 
         style={{display:"none"}}
         id="ringTonePlayer"
         controls
         src={ringTone}>
       </audio>
-      <button onClick={startTimer}>{active? "Reset Timer" : "Start Timer"}</button>
+      {boolTonePlayed && <img src={mesoBag}/>}
+      <button className="startButton" onClick={startTimer}>
+        <span class="front">{active? "Reset Timer" : "Start Timer"}</span>
+      </button>
     </div>
   )
 }
