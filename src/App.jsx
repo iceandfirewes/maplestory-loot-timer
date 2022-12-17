@@ -9,7 +9,9 @@ function App() {
   const MINUTE = SECOND * 60;
   const lootInterval = 120000; //2minutes
   const testlootInterval = 7000; //7s
-  const [mobbingTime, setMobbingTime] = useState(100000) //100s
+  const [mobbingTime, setMobbingTime] = useState(() => {
+    const tempTime = localStorage.getItem("mobbingTime")
+    return tempTime ? tempTime : 100000}) //100s
   const [boolTonePlayed, setBoolTonePlayed] = useState(false)
   function startTimer()
   {
@@ -78,7 +80,9 @@ function App() {
         you should loot at this time.
         You should set the mobbing time so that when you finish looting, the timer is close to 2m.</p>
       <div>
-        Mobbing Time:<input className="secondInput" onChange={(event) => setMobbingTime(event.target.value*SECOND)}value={mobbingTime/1000} placeholder="Seconds"></input><span>s</span>
+        Mobbing Time:<input className="secondInput" 
+        onChange={(event) => {localStorage.setItem("mobbingTime", event.target.value * SECOND),setMobbingTime(event.target.value*SECOND)}}
+        value={mobbingTime/1000} placeholder="Seconds"></input><span>s</span>
       </div>
       <h1 className='timeDisplay'>{timeDisplay}</h1>
       <audio 
