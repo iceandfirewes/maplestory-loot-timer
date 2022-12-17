@@ -4,8 +4,8 @@ import ringTone from './assets/vendarroRing.wav'
 import mesoBag from './assets/mesoBag.png'
 function App() {
   const [active, setActive] = useState(false)
-  const [timeMark, setTimeMark] = useState(Date.now())
-  const [time, setTime] = useState(Date.now())
+  const [timeMark, setTimeMark] = useState(0)
+  const [time, setTime] = useState(0)
   const SECOND = 1000;
   const MINUTE = SECOND * 60;
   const lootInterval = 120000; //2minutes
@@ -16,17 +16,13 @@ function App() {
   {
     setActive(true)
     setTimeMark(Date.now() + 5*SECOND)
+    setTime(Date.now())
     setBoolTonePlayed(false)
-  }
-  function handleInput(event)
-  {
-    
   }
   useEffect(() => {
     if(active)
     {
       const interval = setInterval(() => {
-        console.log(time -timeMark)
         if(time - timeMark > lootInterval)
         //if(time - timeMark > testlootInterval)
         {
@@ -42,7 +38,7 @@ function App() {
           }
         }
         setTime(Date.now())
-      }, .3 * SECOND)
+      }, .5 * SECOND)
       return () => clearInterval(interval);
     }
   /**for some reason, setting this to active and time make the timer
@@ -67,7 +63,7 @@ function App() {
     //for the 5s countdown so it doesnt display -6 then -5 immediately
     else if(value < 0 && label == "seconds")
     {      
-      timeValue = `${Math.ceil(value)}`.padStart(2, "0")
+      timeValue = `${Math.floor(value)}`.padStart(2, "0")
     }
     //add a 0 if is needed
     else
@@ -80,7 +76,7 @@ function App() {
     <div className="App">
       <p className='info'>Meso bag expire every 2 minutes. Thus, you would want to loot everything before that.<br/>
         Please set your mobbing time. for example, 1m40s. When that time has elapsed, a ring tone will sound, 
-        you should loot at this time. When that time has elapese, a ring tone will sound, you should loot at this time.
+        you should loot at this time.
         You should set the mobbing time so that when you finish looting, the timer is close to 2m.</p>
       <div>
         Mobbing Time:<input className="secondInput" onChange={(event) => setMobbingTime(event.target.value*SECOND)}value={mobbingTime/1000} placeholder="Seconds"></input><span>s</span>
@@ -92,7 +88,7 @@ function App() {
         controls
         src={ringTone}>
       </audio>
-      {boolTonePlayed && <img src={mesoBag}/>}
+      {boolTonePlayed && <img src={mesoBag} style={{width:"10em"}}/>}
       <button className="startButton" onClick={startTimer}>
         <span class="front">{active? "Reset Timer" : "Start Timer"}</span>
       </button>
