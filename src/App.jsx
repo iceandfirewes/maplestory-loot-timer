@@ -20,6 +20,15 @@ function App() {
     setTime(Date.now())
     setBoolTonePlayed(false)
   }
+  function handleInput(event)
+  {
+    console.log(event.target.value)
+    if(!isNaN(event.target.value))
+    {
+      localStorage.setItem("mobbingTime", event.target.value * SECOND)
+      setMobbingTime(event.target.value*SECOND)
+    }
+  }
   useEffect(() => {
     if(active)
     {
@@ -81,19 +90,19 @@ function App() {
         You should set the mobbing time so that when you finish looting, the timer is close to 2m.</p>
       <div>
         Mobbing Time:<input className="secondInput" 
-        onChange={(event) => {localStorage.setItem("mobbingTime", event.target.value * SECOND),setMobbingTime(event.target.value*SECOND)}}
+        onChange={(event) => handleInput(event)}
         value={mobbingTime/1000} placeholder="Seconds"></input><span>s</span>
       </div>
       <h1 className='timeDisplay'>{timeDisplay}</h1>
       <audio 
-        style={{display:"none"}}
+        //style={{display:"none"}}
         id="ringTonePlayer"
         controls
         src={ringTone}>
       </audio>
       {boolTonePlayed && <img src={mesoBag} style={{width:"10em"}}/>}
       <button className="startButton" onClick={startTimer}>
-        <span class="front">{active? "Reset Timer" : "Start Timer"}</span>
+        <span className="front">{active? "Reset Timer" : "Start Timer"}</span>
       </button>
     </div>
   )
