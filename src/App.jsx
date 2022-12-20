@@ -84,7 +84,7 @@ function App() {
   })
   return (
     <div className="App">
-      <p className='info'>Meso bag expire every 2 minutes. Thus, you would want to loot everything before that.
+      <p className='info'>Meso bags expire every 2 minutes. Thus, you would want to loot everything before that.
         Please set your mobbing time. for example, 1m40s. When that time has elapsed, a ring tone will sound, 
         you should loot at this time.
         You should set the mobbing time so that when you finish looting, the timer is close to 2m.</p>
